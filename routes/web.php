@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::get('/', function () {
-    return view('welcome');
+    $res = \App\Models\Customer::find(3813)->orders()->orderByDesc('doc_date')->get();
+   // $res = \App\Models\Order::where('customer_id','b001298')->get();
+    return view('index');
+
 });
