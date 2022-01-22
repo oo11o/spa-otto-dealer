@@ -29,7 +29,7 @@
 
 </head>
 <body>
-   <div class="container">
+   <div class="container p-3">
         <div id="app">
             <app></app>
         </div>
