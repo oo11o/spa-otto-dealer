@@ -24,3 +24,5 @@ Route::get('customers/{customer}','App\Http\Controllers\Api\CustomerController@s
 Route::get('orders','App\Http\Controllers\Api\OrderController@index');
 Route::get('orders/{id}','App\Http\Controllers\Api\OrderController@show');
 
+Route::get('status','App\Http\Controllers\Api\StatusController@index');
+
