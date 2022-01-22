@@ -39,3 +39,5 @@ Homestead.json
 /.vagrant
 .phpunit.result.cache
 >>>>>>> e56bc9cd0cad0f44671bf25dfbf6441deb3b27c1
+public/css
+public/js
