@@ -26,3 +26,5 @@ Route::get('orders/{id}','App\Http\Controllers\Api\OrderController@show');
 
 Route::get('status','App\Http\Controllers\Api\StatusController@index');
 
+Route::post('auth','\App\Http\Controllers\Api\UserValidateController@index');
+
