@@ -1,5 +1,8 @@
 <template>
-    <div>
+
+    {{ auth }}
+
+    <div v-if="!auth">
         <div class="container mt-5">
             <div class="row d-flex justify-content-center">
 
@@ -16,12 +19,12 @@
                                 <div class="invalid-feedback">Введите корректный Email!</div>
                             </div>
                             <div class="forms-inputs mb-4"> <span>Пароль</span>
-                                <input autocomplete="off" type="password">
-    <!--                                   v-model="password"-->
+                                <input autocomplete="off" type="password"  v-model="password">
+    <!--                                  -->
     <!--                                   v-bind:class="{'form-control':true, 'is-invalid' : !validPassword(password) && passwordBlured}"-->
     <!--                                   v-on:blur="passwordBlured = true"-->
+                                <div v-if="this.auth === false" class="invalid-feedback" style="display: block" >Логин и пароль не совпадают!</div>
 
-                                <div class="invalid-feedback">Password must be 8 character!</div>
                             </div>
                             <div class="mb-3"> <button v-on:click.stop.prevent="submit" class="btn btn-dark w-100">Войти</button> </div>
                         </div>
@@ -38,28 +41,38 @@
             </div>
         </div>
     </div>
+    <index v-if="auth" :email="auth[0].email" :id="auth[0].id" :id_tetra="auth[0].id_tetra" ></index>
 </template>
 
 <script>
+
+import Index from "./Index";
+
 export default {
     name: "Login",
     data: function () {
         return {
             email : "",
             emailBlured : false,
+
+            password:"",
+            passwordBlured:false,
+
             valid : false,
             submitted : false,
-            password:"",
-            passwordBlured:false
+
+            auth: ''
         }
     },
     methods:{
-
         validate : function(){
             this.emailBlured = true;
             this.passwordBlured = true;
-            if( this.validEmail(this.email) && this.validPassword(this.password)){
-                this.valid = true;
+            if( this.validEmail(this.email)){
+                console.log('check user')
+                this.checkUser();
+            }else{
+                console.log('not valid')
             }
         },
 
@@ -68,15 +81,32 @@ export default {
             if(re.test(email.toLowerCase())){
                 return true;
             }
-
         },
 
         submit : function(){
             this.validate();
             if(this.valid){
-                this.submitted = true;
+               // this.submitted = true;
+                this.$router.push('/index')
             }
-        }
+        },
+
+        checkUser(){
+            axios.post('/api/auth',{
+                    login: this.email,
+                    pass: this.password,
+                })
+                .then(response => {
+                     this.auth = response.data.data[0] ? response.data.data : false
+                })
+                .catch((err) => {
+                        console.log(err);
+                })
+            }
+    },
+
+    components: {
+        Index
     }
 }
 
