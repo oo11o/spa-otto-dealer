@@ -1,8 +1,6 @@
 <template>
     <div>
-        {{id}}
-        {{email}}
-        {{id_tetra}}
+
         <div class="row justify-content-center mt-5">
             <div class="col-md-6 mb-5 text-center">
                 <a href="https://www.otto.com.ua/" target="_blank"><img src="/img/logo.png" class="img-fluid"></a>
@@ -11,33 +9,36 @@
 
         <div class="alert alert-success" role="alert">
             <h4 class="alert-heading" v-if="customer.name1">Здравствуйте, {{ customer.name1.toUpperCase() }}!</h4>
-            <p>Ваш email: {{ customer.email }}</p>
+            <p>{{ customer.email }}</p>
+            <p class="text-body font-monospace"> Ваш  баланс на {{ data_now }}: <span class="fw-bold"> {{ saldo }}</span> евро.</p>
             <hr>
-            <p class="mb-0">Заказы на Отто Украина формируются и упаковываются в Германии! </p>
+            <p class="mb-0">Заказы формируются и упаковываются в Германии! </p>
         </div>
 
-        <table v-for="item in orders" class="table order">
+        <table v-for="item in orders" class="table order table-striped">
             <thead class="table-dark table-bordered">
             <tr>
                 <td>Дата заказа</td>
+                <td>Номер заказа</td>
                 <td>Каталог</td>
                 <td>Название Товара</td>
                 <td>Размер</td>
                 <td>Артикул</td>
                 <td>Цена в каталоге</td>
-                <td>Цена</td>
+                <td>Стоимость</td>
                 <td>Статус</td>
                 <!--                    <td>Дата отправки</td>-->
                 <!--                    <td>Дата возврата</td>-->
             </tr>
             </thead>
-            <tbody>
+            <tbody >
             <tr v-for="order in item.orders">
                 <td>{{ (order.doc_date).split(' ')[0] }}</td>
+                <td>{{ order.order_id }}</td>
                 <td>{{ order.catalog }}</td>
                 <td>{{ order.title }}</td>
                 <td>{{ order.size }}</td>
-                <td>{{ order.catalog }}</td>
+                <td>{{ order.sku}}</td>
                 <td>{{ order.price_catalog }}</td>
                 <td>{{ order.price }}</td>
                 <td>{{ checkStatus(order.status) }}</td>
@@ -52,12 +53,13 @@
 <script>
 export default {
     name: "App",
-    props: ['id','email','id_tetra'],
+    props: ['id','email','id_tetra', 'saldo', 'auth'],
     data() {
         return {
             customer: '',
             status: '',
-            orders: []
+            orders: [],
+            data_now: '',
         }
     },
     methods: {
@@ -93,9 +95,13 @@ export default {
                             'name': orders[i].order_id,
                             'orders': [orders[i]],
                         })
-
                 }
             }
+        },
+
+        getDateNow(){
+            const dateNow = new Date()
+            this.data_now = `${dateNow.getDate()}-${dateNow.getDay()}-${dateNow.getFullYear()}`
         },
 
         checkStatus(idStatus) {
@@ -117,7 +123,8 @@ export default {
     },
     mounted() {
         this.getResult(),
-            this.getStatus()
+        this.getStatus(),
+        this.getDateNow()
     }
 }
 </script>

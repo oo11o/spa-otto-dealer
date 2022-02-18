@@ -1,7 +1,5 @@
 <template>
-
-    {{ auth }}
-
+    {{ data_now }}
     <div v-if="!auth">
         <div class="container mt-5">
             <div class="row d-flex justify-content-center">
@@ -41,7 +39,7 @@
             </div>
         </div>
     </div>
-    <index v-if="auth" :email="auth[0].email" :id="auth[0].id" :id_tetra="auth[0].id_tetra" ></index>
+    <index v-if="auth" :auth="auth[0]" :email="auth[0].email" :saldo="auth[0].saldo" :id="auth[0].id" :id_tetra="auth[0].id_tetra" ></index>
 </template>
 
 <script>
@@ -61,7 +59,10 @@ export default {
             valid : false,
             submitted : false,
 
-            auth: ''
+            auth: '',
+
+
+            data_now: ''
         }
     },
     methods:{
